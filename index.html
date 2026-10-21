@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <meta charset="UTF-//Copia automática para o clipboard
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Claude Studio - Minimalist</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-//Copia automática para o clipboard
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
@@ -40,6 +42,7 @@
                 </div>
                 <span class="font-semibold text-gray-700 tracking-tight">Claude Studio</span>
             </div>
+            <button onclick="//Copia automática para o clipboard
             <button onclick="newChat()" class="w-full bg-white hover:bg-gray-50 border border-gray-200 transition-all rounded-2xl p-3 text-sm flex items-center justify-center gap-2 text-gray-600 hover:text-gray-900 shadow-sm">
                 <i class="fas fa-plus text-xs"></i> Novo Chat
             </button>
@@ -54,7 +57,6 @@
     </aside>
 
     <!-- Main Chat -->
-    <main class="flex-1 flex flex-col h-full relative bg-[#f9f7//Copia automática para o clipboard
     <main class="flex-1 flex flex-col h-full relative bg-[#f9f7f2]">
         <header class="h-16 flex justify-between items-center px-8 sticky top-0 z-10">
             <div class="flex items-center gap-4">
@@ -117,6 +119,7 @@
             recognition.onend = () => {
                 isListening = false;
                 micIcon.classList.remove('text-orange-500');
+                micIcon.classList.add('text-//Copia automática para o clipboard
                 micIcon.classList.add('text-gray-400');
             };
         }
@@ -135,18 +138,37 @@
 
         function speak(text) {
             if (!window.speechSynthesis) return;
+            // Cancela falas anteriores para não encavalar
+            window.speechSynthesis.cancel();
+
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'pt-BR';
+
+            // Prioridade de vozes mais humanas
             const voices = window.speechSynthesis.getVoices();
-            const femaleVoice = voices.find(v => (v.name.includes('Maria') || v.name.includes('Heloisa') || v.name.includes('Google')) && v.lang.includes('pt'));
-            if (femaleVoice) utterance.voice = femaleVoice;
-            utterance.pitch = 1.1;
+            const priorityVoices = ['Google português do Brasil', 'Microsoft Maria Online', 'Microsoft Francisca Online', 'Heloisa'];
+
+            let selectedVoice = voices.find(v =>
+                v.lang.includes('pt') &&
+                priorityVoices.some(pv => v.name.includes(pv))
+            );
+
+            if (!selectedVoice) {
+                selectedVoice = voices.find(v => v.lang.includes('pt'));
+            }
+
+            if (selectedVoice) utterance.voice = selectedVoice;
+
+            utterance.pitch = 1.0;
+            utterance.rate = 1.0;
             window.speechSynthesis.speak(utterance);
         }
 
         async function sendMessage() {
+            const text = userInput.//Copia automática para o clipboard
             const text = userInput.value.trim();
             if (!text) return;
+            if(welcome) welcome.style.//Copia automática para o clipboard
             if(welcome) welcome.style.display = 'none';
 
             appendMessage('user', text);
@@ -189,8 +211,51 @@
                     <div class="text-gray-800 p-1 rounded-lg text-sm">${text}</div>
                    </div>`;
             msgDiv.innerHTML = content;
+            //Copia automática para o clipboard
             chatWindow.appendChild(msgDiv);
-            //Limpando a rolagem
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para o clipboard
+            //Copia automática para or o site agora! 🚀🎙️
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
@@ -209,9 +274,8 @@
                     <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
                 </div>
             </div>`;
-            //Limpando a rolagem
             chatWindow.appendChild(typingDiv);
-            //Limpando a rolagem
+            chatWindow.scrollTop = chat//Copia automática para o clipboard
             chatWindow.scrollTop = chatWindow.scrollHeight;
             return id;
         }
@@ -222,7 +286,6 @@
         }
 
         function clearChat() {
-            //Limpando a rolagem
             chatWindow.innerHTML = '';
             if(welcome) welcome.style.display = 'block';
         }
