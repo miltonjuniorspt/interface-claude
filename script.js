@@ -99,7 +99,7 @@ function handleVoiceCommand(text) {
 // Initial Data
 let projects = JSON.parse(localStorage.getItem(PROJECTS_KEY)) || [
 
-    { id: 1, name: 'Interface Visual', desc: 'Dashboard para interagir com o Claude Code', status: 'Em andamento' }
+    { id: 1, name: 'Interface Visual', desc: 'Dashboard para interagir com o Claude Code', status: 'Concluído' }
 ];
 
 let notes = JSON.parse(localStorage.getItem(NOTES_KEY)) || [];
