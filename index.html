@@ -3,101 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interface de Interação - Claude Code</title>
+    <title>Claude Studio - Minimalist</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f7f2;
+            color: #374151;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .message-appear { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .claude-input {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+        .claude-input:focus-within {
+            border-color: #d1d5db;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+<body class="h-screen flex overflow-hidden">
 
-    <!-- Navbar -->
-    <nav class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold flex items-center gap-2">
-                <i class="fas fa-robot text-blue-400"></i>
-                Claude Interaction Hub
-            </h1>
-            <div class="flex gap-4">
-                <button onclick="showSection('projects')" class="hover:text-blue-400 transition">Projetos</button>
-                <button onclick="showSection('logs')" class="hover:text-blue-400 transition">Logs</button>
-                <button onclick="showSection('notes')" class="hover:text-blue-400 transition">Notas</button>
+    <!-- Sidebar Minimalista -->
+    <aside class="w-64 bg-[#f3f0ea] h-full flex flex-col border-r border-gray-200 hidden md:flex">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
+                    <i class="fas fa-leaf text-sm"></i>
+                </div>
+                <span class="font-semibold text-gray-700 tracking-tight">Claude Studio</span>
+            </div>
+            <button onclick="newChat()" class="w-full bg-white hover:bg-gray-50 border border-gray-200 transition-all rounded-2xl p-3 text-sm flex items-center justify-center gap-2 text-gray-600 hover:text-gray-900 shadow-sm">
+                <i class="fas fa-plus text-xs"></i> Novo Chat
+            </button>
+        </div>
+        <div id="chat-history" class="flex-1 overflow-y-auto custom-scrollbar px-4 space-y-2"></div>
+        <div class="p-6 border-t border-gray-200">
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/50 border border-gray-100">
+                <div class="w-8 h-8 rounded-full bg-gray-200"></div>
+                <span class="text-xs font-medium text-gray-500">Sessão Local</span>
             </div>
         </div>
-    </nav>
+    </aside>
 
-    <main class="container mx-auto p-6">
-
-        <!-- Seção de Projetos -->
-        <section id="projects" class="content-section">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-semibold">🚀 Meus Projetos</h2>
-                <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition flex items-center gap-2">
-                    <i class="fas fa-plus"></i> Novo Projeto
-                </button>
+    <!-- Main Chat -->
+    <main class="flex-1 flex flex-col h-full relative bg-[#f9f7//Copia automática para o clipboard
+    <main class="flex-1 flex flex-col h-full relative bg-[#f9f7f2]">
+        <header class="h-16 flex justify-between items-center px-8 sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <h2 class="text-sm font-medium text-gray-400 uppercase tracking-widest">Claude AI</h2>
             </div>
-            <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Os projetos serão inseridos aqui via JS -->
-            </div>
-        </section>
+            <button onclick="clearChat()" class="text-gray-400 hover:text-gray-600 transition-all text-xs flex items-center gap-2">
+                <i class="fas fa-trash-alt"></i> Limpar conversa
+            </button>
+        </header>
 
-        <!-- Seção de Logs -->
-        <section id="logs" class="content-section hidden">
-            <h2 class="text-2xl font-semibold mb-6">📜 Log de Atividades</h2>
-            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
-                <div id="activity-log" class="space-y-4">
-                    <!-- Logs serão inseridos aqui -->
+        <div id="chat-window" class="flex-1 overflow-y-auto custom-scrollbar p-4 md:px-20 lg:px-40 space-y-8">
+            <div id="welcome" class="max-w-2xl mx-auto text-center my-20 space-y-6">
+                <h1 class="text-4xl font-semibold text-gray-800 tracking-tight">Como posso ajudar?</h1>
+                <p class="text-gray-500 text-lg">Sinta-se à vontade para perguntar qualquer coisa ou pedir ajuda com seus projetos.</p>
+            </div>
+        </div>
+
+        <div class="p-6 pb-10 bg-transparent">
+            <div class="max-w-3xl mx-auto relative">
+                <div class="claude-input bg-white rounded-3xl flex items-end p-3 transition-all">
+                    <button id="voice-btn" onclick="toggleVoice()" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:text-orange-500 transition-all active:scale-90 mb-1 ml-1">
+                        <i id="mic-icon" class="fas fa-microphone"></i>
+                    </button>
+                    <textarea id="user-input"
+                        class="w-full bg-transparent p-3 outline-none resize-none text-gray-700 placeholder-gray-400 custom-scrollbar"
+                        rows="1"
+                        placeholder="Envie uma mensagem..."
+                        oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                    <button onclick="sendMessage()"
+                        class="w-10 h-10 bg-gray-900 text-white rounded-full hover:bg-black transition-all flex items-center justify-center shadow-md active:scale-90 mb-1 mr-1">
+                        <i class="fas fa-arrow-up text-xs"></i>
+                    </button>
                 </div>
+                <p class="text-[11px] text-center text-gray-400 mt-4">
+                    Claude Studio pode cometer erros. Verifique informações importantes.
+                </p>
             </div>
-        </section>
-
-        <!-- Seção de Notas -->
-        <section id="notes" class="content-section hidden">
-            <h2 class="text-2xl font-semibold mb-6">📝 Notas & Prompts</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <h3 class="text-lg font-medium mb-4">Adicionar Nota</h3>
-                    <textarea id="note-input" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-blue-500 outline-none" rows="4" placeholder="Ex: Prompt para refatoração de código..."></textarea>
-                    <button onclick="addNote()" class="mt-3 bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition">Salvar Nota</button>
-                </div>
-                <div id="notes-list" class="space-y-4">
-                    <!-- Notas serão inseridas aqui -->
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
-    <!-- Botão de Voz Flutuante -->
-    <div class="fixed bottom-8 right-8 flex flex-col items-end gap-2">
-        <div id="voice-status" class="hidden bg-blue-600 text-white text-xs px-3 py-1 rounded-full mb-2 animate-pulse">
-            Ouvindo...
-        </div>
-        <button id="voice-btn" onclick="toggleVoice()" class="w-16 h-16 bg-blue-600 hover:bg-blue-500 rounded-full shadow-lg flex items-center justify-center text-2xl transition-all active:scale-90">
-            <i class="fas fa-microphone"></i>
-        </button>
-    </div>
+    <script>
+        const chatWindow = document.getElementById('chat-window');
+        const userInput = document.getElementById('user-input');
+        const welcome = document.getElementById('welcome');
+        const voiceBtn = document.getElementById('voice-btn');
+        const micIcon = document.getElementById('mic-icon');
 
-    <!-- Modal para Novo Projeto -->
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+        let isListening = false;
 
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 w-full max-w-md">
-            <h3 class="text-xl font-bold mb-4">Novo Projeto</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">Nome do Projeto</label>
-                    <input type="text" id="proj-name" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">Descrição</label>
-                    <textarea id="proj-desc" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500" rows="3"></textarea>
-                </div>
-                <div class="flex justify-end gap-3 mt-6">
-                    <button onclick="closeModal()" class="px-4 py-2 text-slate-400 hover:text-white">Cancelar</button>
-                    <button onclick="saveProject()" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition">Criar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR';
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+                sendMessage();
+            };
+            recognition.onend = () => {
+                isListening = false;
+                micIcon.classList.remove('text-orange-500');
+                micIcon.classList.add('text-gray-400');
+            };
+        }
 
-    <script src="script.js?v=1.1"></script>
+        function toggleVoice() {
+            if (!recognition) return alert('Seu navegador não suporta voz.');
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+                isListening = true;
+                micIcon.classList.remove('text-gray-400');
+                micIcon.classList.add('text-orange-500');
+            }
+        }
+
+        function speak(text) {
+            if (!window.speechSynthesis) return;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'pt-BR';
+            const voices = window.speechSynthesis.getVoices();
+            const femaleVoice = voices.find(v => (v.name.includes('Maria') || v.name.includes('Heloisa') || v.name.includes('Google')) && v.lang.includes('pt'));
+            if (femaleVoice) utterance.voice = femaleVoice;
+            utterance.pitch = 1.1;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+            if(welcome) welcome.style.display = 'none';
+
+            appendMessage('user', text);
+            userInput.value = '';
+            userInput.style.height = 'auto';
+
+            const typingId = showTyping();
+
+            try {
+                const response = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await response.json();
+                removeTyping(typingId);
+
+                if (data.reply) {
+                    appendMessage('claude', data.reply);
+                    speak(data.reply);
+                } else {
+                    appendMessage('claude', 'Erro na resposta.');
+                }
+            } catch (error) {
+                removeTyping(typingId);
+                appendMessage('claude', 'Erro de conexão com o servidor local.');
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} message-appear mb-8`;
+
+            const content = sender === 'user'
+                ? `<div class="bg-white text-gray-800 p-4 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm border border-gray-100 text-sm">${text}</div>`
+                : `<div class="flex gap-4 max-w-[85%]">
+                    <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-robot text-xs text-orange-600"></i>
+                    </div>
+                    <div class="text-gray-800 p-1 rounded-lg text-sm">${text}</div>
+                   </div>`;
+            msgDiv.innerHTML = content;
+            chatWindow.appendChild(msgDiv);
+            //Limpando a rolagem
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function showTyping() {
+            const id = 'typing-' + Date.now();
+            const typingDiv = document.createElement('div');
+            typingDiv.id = id;
+            typingDiv.className = 'flex justify-start message-appear mb-6';
+            typingDiv.innerHTML = `<div class="flex gap-3 max-w-[85%]">
+                <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <i class="fas fa-robot text-xs text-orange-600"></i>
+                </div>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none flex gap-1 items-center border border-gray-100 shadow-sm">
+                    <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></span>
+                    <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                    <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                </div>
+            </div>`;
+            //Limpando a rolagem
+            chatWindow.appendChild(typingDiv);
+            //Limpando a rolagem
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            return id;
+        }
+
+        function removeTyping(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function clearChat() {
+            //Limpando a rolagem
+            chatWindow.innerHTML = '';
+            if(welcome) welcome.style.display = 'block';
+        }
+
+        function newChat() { clearChat(); }
+
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
 </body>
 </html>
