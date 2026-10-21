@@ -81,20 +81,17 @@ function handleVoiceCommand(text) {
 
     // Copia automaticamente para o clipboard para você colar no Claude Code
     navigator.clipboard.writeText(text).then(() => {
-        speak(`Eu ouvi: ${text}. O texto já está copiado para você colar no Claude.`);
+        // Agora ela fala apenas "Ok" de forma curta e direta
+        speak('Ok');
     });
 
     if (text.toLowerCase().includes('novo projeto')) {
-        speak('Abrindo tela de novo projeto.');
         openModal();
     } else if (text.toLowerCase().includes('notas')) {
-        speak('Indo para suas notas.');
         showSection('notes');
     } else if (text.toLowerCase().includes('projetos')) {
-        speak('Mostrando seus projetos.');
         showSection('projects');
     } else if (text.toLowerCase().includes('logs')) {
-        speak('Abrindo o log de atividades.');
         showSection('logs');
     }
 }
