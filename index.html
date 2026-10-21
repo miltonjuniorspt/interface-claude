@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface de Interação - Claude Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <i class="fas fa-robot text-blue-400"></i>
+                Claude Interaction Hub
+            </h1>
+            <div class="flex gap-4">
+                <button onclick="showSection('projects')" class="hover:text-blue-400 transition">Projetos</button>
+                <button onclick="showSection('logs')" class="hover:text-blue-400 transition">Logs</button>
+                <button onclick="showSection('notes')" class="hover:text-blue-400 transition">Notas</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+
+        <!-- Seção de Projetos -->
+        <section id="projects" class="content-section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold">🚀 Meus Projetos</h2>
+                <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Novo Projeto
+                </button>
+            </div>
+            <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Os projetos serão inseridos aqui via JS -->
+            </div>
+        </section>
+
+        <!-- Seção de Logs -->
+        <section id="logs" class="content-section hidden">
+            <h2 class="text-2xl font-semibold mb-6">📜 Log de Atividades</h2>
+            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                <div id="activity-log" class="space-y-4">
+                    <!-- Logs serão inseridos aqui -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Notas -->
+        <section id="notes" class="content-section hidden">
+            <h2 class="text-2xl font-semibold mb-6">📝 Notas & Prompts</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <h3 class="text-lg font-medium mb-4">Adicionar Nota</h3>
+                    <textarea id="note-input" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-blue-500 outline-none" rows="4" placeholder="Ex: Prompt para refatoração de código..."></textarea>
+                    <button onclick="addNote()" class="mt-3 bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition">Salvar Nota</button>
+                </div>
+                <div id="notes-list" class="space-y-4">
+                    <!-- Notas serão inseridas aqui -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botão de Voz Flutuante -->
+    <div class="fixed bottom-8 right-8 flex flex-col items-end gap-2">
+        <div id="voice-status" class="hidden bg-blue-600 text-white text-xs px-3 py-1 rounded-full mb-2 animate-pulse">
+            Ouvindo...
+        </div>
+        <button id="voice-btn" onclick="toggleVoice()" class="w-16 h-16 bg-blue-600 hover:bg-blue-500 rounded-full shadow-lg flex items-center justify-center text-2xl transition-all active:scale-90">
+            <i class="fas fa-microphone"></i>
+        </button>
+    </div>
+
+    <!-- Modal para Novo Projeto -->
+
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 w-full max-w-md">
+            <h3 class="text-xl font-bold mb-4">Novo Projeto</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm text-slate-400 mb-1">Nome do Projeto</label>
+                    <input type="text" id="proj-name" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm text-slate-400 mb-1">Descrição</label>
+                    <textarea id="proj-desc" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500" rows="3"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button onclick="closeModal()" class="px-4 py-2 text-slate-400 hover:text-white">Cancelar</button>
+                    <button onclick="saveProject()" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition">Criar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
